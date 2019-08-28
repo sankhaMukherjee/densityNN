@@ -1,10 +1,10 @@
 # densityNN
 
-One Paragraph of project description goes here
+This project is going to be used for studying density-based methods used in AI, including Gaussian Processes, variational flows, etc. We shall explore different ways of exploring the errors that neural networks might cause in a meaningful manner. 
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system. his project, like all my other projects uses a particular project structure. Details of how to use this project is present in the [Wiki page](https://github.com/sankhaMukherjee/densityNN/wiki). Please visit that to understand the project sis structured.
 
 ## Prerequisites
 
@@ -30,17 +30,26 @@ At this point you are ready to run programs. However, remember that you will nee
 For activating your virtual environment, type `source env/bin/activate` in the project folder in [bash](https://www.gnu.org/software/bash/) or `source env/bin/activate.fish` if you are using the [fish](https://fishshell.com/) shell.
 For deactivating, just type deactivate in your shell
 
-## Deployment
+## Documentation
 
-Add additional notes about how to deploy this on a live system
+Detailed documentation is present in the [Wiki](https://github.com/sankhaMukherjee/densityNN/wiki). The API generated is present in the repos website [website](https://sankhamukherjee.github.io/densityNN/index.html). 
 
-## Built With
+Since this repo mainly comprises of a set of tutorials, the main page of the tutorials may be found [here](https://github.com/sankhaMukherjee/densityNN/wiki/tutorial). This comprises of a set of tutorials that can be used for exploring density-based AI methodologies.
 
- - Python 3.6
+Here are some quick links:
+
+| API Reference  |
+|----------------|
+| [API Main page](https://sankhamukherjee.github.io/densityNN/index.html) | 
+| [Modules](https://sankhamukherjee.github.io/densityNN/modules.html) |
+| [lib](https://sankhamukherjee.github.io/densityNN/lib.html) |
+| Indices: [Index](https://sankhamukherjee.github.io/densityNN/genindex.html) \| [Module Index](https://sankhamukherjee.github.io/densityNN/py-modindex.html)  |
+
+
 
 ## Contributing
 
-Please send in a pull request.
+Plaease see detailed instructions of how to contribute to this project [here](https://github.com/sankhaMukherjee/densityNN/wiki/Contributing).
 
 ## Authors
 
