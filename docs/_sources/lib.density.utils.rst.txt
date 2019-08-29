@@ -1,0 +1,22 @@
+lib.density.utils package
+=========================
+
+Submodules
+----------
+
+lib.density.utils.divergences module
+------------------------------------
+
+.. automodule:: lib.density.utils.divergences
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: lib.density.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

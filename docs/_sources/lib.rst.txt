@@ -10,6 +10,7 @@ Subpackages
    lib.celery
    lib.celeryWorkerExample
    lib.databaseIO
+   lib.density
    lib.resultGraph
    lib.testLib
 
