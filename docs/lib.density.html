@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>lib.testLib package &mdash; src  documentation</title>
+  <title>lib.density package &mdash; src  documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="logs package" href="logs.html" />
-    <link rel="prev" title="lib.resultGraph package" href="lib.resultGraph.html" /> 
+    <link rel="next" title="lib.density.utils package" href="lib.density.utils.html" />
+    <link rel="prev" title="lib.databaseIO package" href="lib.databaseIO.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -90,14 +90,13 @@
 <li class="toctree-l3"><a class="reference internal" href="lib.celery.html">lib.celery package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lib.celeryWorkerExample.html">lib.celeryWorkerExample package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lib.databaseIO.html">lib.databaseIO package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="lib.density.html">lib.density package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="lib.resultGraph.html">lib.resultGraph package</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">lib.testLib package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-lib.testLib.simpleLib">lib.testLib.simpleLib module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-lib.testLib">Module contents</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">lib.density package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-lib.density">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="lib.resultGraph.html">lib.resultGraph package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lib.testLib.html">lib.testLib package</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="lib.html#module-lib">Module contents</a></li>
@@ -152,13 +151,13 @@
         
           <li><a href="lib.html">lib package</a> &raquo;</li>
         
-      <li>lib.testLib package</li>
+      <li>lib.density package</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/lib.testLib.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/lib.density.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -171,47 +170,27 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="lib-testlib-package">
-<h1>lib.testLib package<a class="headerlink" href="#lib-testlib-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-lib.testLib.simpleLib">
-<span id="lib-testlib-simplelib-module"></span><h2>lib.testLib.simpleLib module<a class="headerlink" href="#module-lib.testLib.simpleLib" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="lib.testLib.simpleLib.simpleTestFunction">
-<code class="sig-prename descclassname">lib.testLib.simpleLib.</code><code class="sig-name descname">simpleTestFunction</code><span class="sig-paren">(</span><em class="sig-param">logger</em>, <em class="sig-param">a</em>, <em class="sig-param">b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/testLib/simpleLib.html#simpleTestFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.testLib.simpleLib.simpleTestFunction" title="Permalink to this definition">¶</a></dt>
-<dd><p>simple test function for testing</p>
-<p>this takes two inputs and returns the
-sum of the two inputs. This might result
-in an error. If such a thing happens,
-this function will catch this error and
-log it. It will raise the error again
-to be caught at a higher level function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>{any type}</em>) – the first input</p></li>
-<li><p><strong>b</strong> ({similar type as <cite>a</cite>}) – the second input</p></li>
+  <div class="section" id="lib-density-package">
+<h1>lib.density package<a class="headerlink" href="#lib-density-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lib.density.utils.html">lib.density.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lib.density.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lib.density.utils.html#module-lib.density.utils.divergences">lib.density.utils.divergences module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lib.density.utils.html#module-lib.density.utils">Module contents</a></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the sum of <cite>a</cite> and <cite>b</cite></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>similar type as <cite>a</cite> and <cite>b</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
+</li>
+</ul>
 </div>
-<div class="section" id="module-lib.testLib">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lib.testLib" title="Permalink to this headline">¶</a></h2>
-<p>test library</p>
-<p>Dont use this folder. This has been placed here solely for demonstration.
-You are welcome to use this folder as a template for other libraries. This
-folder has a single file, and within that a single folder, for demo
-purposes. It is possible that other libraries will be added as necessary.</p>
+</div>
+<div class="section" id="module-lib.density">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lib.density" title="Permalink to this headline">¶</a></h2>
+<p>library for density-based algorithms</p>
+<p>This module is going to contain a set of libraries that can be used to generate
+algorithms associated with machine learning. Most of these algorithms are already
+implemented elsewhere, and this library is generated for my own learning.</p>
 </div>
 </div>
 
@@ -223,10 +202,10 @@ purposes. It is possible that other libraries will be added as necessary.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="logs.html" class="btn btn-neutral float-right" title="logs package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="lib.density.utils.html" class="btn btn-neutral float-right" title="lib.density.utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="lib.resultGraph.html" class="btn btn-neutral float-left" title="lib.resultGraph package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="lib.databaseIO.html" class="btn btn-neutral float-left" title="lib.databaseIO package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

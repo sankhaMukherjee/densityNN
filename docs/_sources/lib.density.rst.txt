@@ -1,0 +1,17 @@
+lib.density package
+===================
+
+Subpackages
+-----------
+
+.. toctree::
+
+   lib.density.utils
+
+Module contents
+---------------
+
+.. automodule:: lib.density
+   :members:
+   :undoc-members:
+   :show-inheritance:
