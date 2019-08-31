@@ -1,6 +1,10 @@
 from logs import logDecorator as lD
 import jsonref
 import numpy as np
+from scipy.optimize import minimize
+from scipy.stats import multivariate_normal
+
+from lib.density.utils import divergences
 
 config   = jsonref.load(open('../config/config.json'))
 logBase  = config['logging']['logBase'] + '.lib.density.utils.OptimizeNormalKL'
@@ -83,7 +87,7 @@ class OptimizeNormalKL:
         for i, s in enumerate(sigma):
             sigma_1[i,i] = s
         
-        q = multivariate_normal.pdf( theta, mu, sigma_1 )
+        q = multivariate_normal.pdf( self.theta, mu, sigma_1 )
         result = divergences.D_KL( self.p, q)
         
         return result
