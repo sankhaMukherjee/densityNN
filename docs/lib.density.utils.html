@@ -219,16 +219,19 @@ find a multivariate normal distribution over.</p></li>
 <dl class="method">
 <dt id="lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.minFunc">
 <code class="sig-name descname">minFunc</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/utils/OptimizeNormalKL.html#OptimizeNormalKL.minFunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.minFunc" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
+<dd><p>internal function: not to be used</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p>
+<dd class="field-odd"><p><strong>x</strong> (<em>(</em><em>2d</em><em>,</em><em>) </em><em>nd-array</em>) – the mean and the std of the arrays that we are trying
+to optimize coalesed into a signle array</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>[description]</p>
+<dd class="field-even"><p>The value of the KL divergence for the supplied value of
+the mu and theta between the provided probability distribution
+and our approximate probability distribution</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>[type]</p>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -236,16 +239,21 @@ find a multivariate normal distribution over.</p></li>
 <dl class="method">
 <dt id="lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.optimize">
 <code class="sig-name descname">optimize</code><span class="sig-paren">(</span><em class="sig-param">mu0</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/utils/OptimizeNormalKL.html#OptimizeNormalKL.optimize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.optimize" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
+<dd><p>function that is used for the optimization process</p>
+<p>This is going to get optimized values of the <span class="math notranslate nohighlight">\(\mu\)</span> and the
+<span class="math notranslate nohighlight">\(\Sigma\)</span> that would allow a multivariate normal distribution
+to be generated that will minimize the KL divergence between the
+provided data and the generated multivariate normal distribution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>mu0</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p>
+<dd class="field-odd"><p><strong>mu0</strong> (<em>(</em><em>d</em><em>,</em><em>) </em><em>nd-array</em>) – The initial guess of the value of the <span class="math notranslate nohighlight">\(\mu\)</span></p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>[description]</p>
+<dd class="field-even"><p>The probability of the values for the normal distribution at the
+specified points</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>[type]</p>
+<dd class="field-odd"><p>(N,) uarray</p>
 </dd>
 </dl>
 </dd></dl>

@@ -211,17 +211,20 @@
 
     
 <div class="viewcode-block" id="OptimizeNormalKL.minFunc"><a class="viewcode-back" href="../../../../lib.density.utils.html#lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.minFunc">[docs]</a>    <span class="k">def</span> <span class="nf">minFunc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;[summary]</span>
+        <span class="sd">&#39;&#39;&#39;internal function: not to be used</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        x : [type]</span>
-<span class="sd">            [description]</span>
+<span class="sd">        x : (2d,) nd-array</span>
+<span class="sd">            the mean and the std of the arrays that we are trying</span>
+<span class="sd">            to optimize coalesed into a signle array</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        [type]</span>
-<span class="sd">            [description]</span>
+<span class="sd">        float</span>
+<span class="sd">            The value of the KL divergence for the supplied value of</span>
+<span class="sd">            the mu and theta between the provided probability distribution</span>
+<span class="sd">            and our approximate probability distribution</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         
         <span class="n">mu</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
@@ -236,17 +239,23 @@
         <span class="k">return</span> <span class="n">result</span></div>
     
 <div class="viewcode-block" id="OptimizeNormalKL.optimize"><a class="viewcode-back" href="../../../../lib.density.utils.html#lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.optimize">[docs]</a>    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mu0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;[summary]</span>
+        <span class="sd">&#39;&#39;&#39;function that is used for the optimization process</span>
+
+<span class="sd">        This is going to get optimized values of the :math:`\\mu` and the </span>
+<span class="sd">        :math:`\\Sigma` that would allow a multivariate normal distribution</span>
+<span class="sd">        to be generated that will minimize the KL divergence between the</span>
+<span class="sd">        provided data and the generated multivariate normal distribution.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        mu0 : [type]</span>
-<span class="sd">            [description]</span>
+<span class="sd">        mu0 : (d,) nd-array</span>
+<span class="sd">            The initial guess of the value of the :math:`\\mu`</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        [type]</span>
-<span class="sd">            [description]</span>
+<span class="sd">        (N,) uarray</span>
+<span class="sd">            The probability of the values for the normal distribution at the</span>
+<span class="sd">            specified points</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         
         <span class="n">sigma0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span> <span class="n">mu0</span><span class="o">.</span><span class="n">shape</span> <span class="p">)</span>
