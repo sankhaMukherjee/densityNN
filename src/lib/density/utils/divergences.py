@@ -3,7 +3,7 @@ import jsonref
 import numpy as np
 
 config   = jsonref.load(open('../config/config.json'))
-logBase  = config['logging']['logBase'] + '.lib.density.utils'
+logBase  = config['logging']['logBase'] + '.lib.density.utils.divergences'
 
 @lD.log( logBase + '.D_KL' )
 def D_KL(logger, p, q, epsilon=1e-50, returnVals=False):
