@@ -177,6 +177,82 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="module-lib.density.utils.OptimizeNormalKL">
+<span id="lib-density-utils-optimizenormalkl-module"></span><h2>lib.density.utils.OptimizeNormalKL module<a class="headerlink" href="#module-lib.density.utils.OptimizeNormalKL" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lib.density.utils.OptimizeNormalKL.OptimizeNormalKL">
+<em class="property">class </em><code class="sig-prename descclassname">lib.density.utils.OptimizeNormalKL.</code><code class="sig-name descname">OptimizeNormalKL</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">theta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/utils/OptimizeNormalKL.html#OptimizeNormalKL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.utils.OptimizeNormalKL.OptimizeNormalKL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generate a Normal distribution using the KL divergence</p>
+<p>This class allows you to generate a normal distribution that
+can be later used as a proxy for a different distribution.
+This can be used in many applications, such as MCMC integration
+of distributions when the actual distribution is not known. In
+this system, you will start by defining <span class="math notranslate nohighlight">\(\mathbf \theta\)</span> and
+<span class="math notranslate nohighlight">\(p\)</span>.</p>
+<p>Here, <span class="math notranslate nohighlight">\(\mathbf \theta = [\theta_1, \theta_2, \ldots, \theta_N]\)</span>
+is represented by an <span class="math notranslate nohighlight">\(N \times d\)</span> array, where each row is a single
+<span class="math notranslate nohighlight">\(d\)</span>-dimensional <span class="math notranslate nohighlight">\(\theta\)</span> vector.</p>
+<p><span class="math notranslate nohighlight">\(p\)</span> is an <span class="math notranslate nohighlight">\(N\)</span>-dimensional vector that represents the precomputed
+values of the probability densities at each of the <span class="math notranslate nohighlight">\(N\)</span> points of the
+<span class="math notranslate nohighlight">\(\theta\)</span> vactors.</p>
+<p>This class will attempt to generate a new multinomial Gaussian Distribution
+<span class="math notranslate nohighlight">\(q\)</span>, where</p>
+<div class="math notranslate nohighlight">
+\[q(\theta) = \frac {1} {\sqrt{ (2 \pi) ^k  |\Sigma|}} exp \Big( -\frac 1 2  (\theta-\mu)^{\top} \Sigma^{-1} (\theta-\mu)  \Big)\]</div>
+<p>such that the KL-divergence</p>
+<div class="math notranslate nohighlight">
+\[D_{KL}(p||q) = - \sum_{\theta \in \chi} p(\theta) \log \frac {q(\theta)} {p(\theta)}\]</div>
+<p>is minimized. So, after the optimization process, we should have a <span class="math notranslate nohighlight">\(\mu\)</span> and a <span class="math notranslate nohighlight">\(\Sigma\)</span> that
+will minimize the KL-divergence. For simplicity, this will only generate a diagonal <span class="math notranslate nohighlight">\(\Sigma\)</span>.</p>
+<p>Create an instance of the object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>(</em><em>N</em><em>,</em><em>) </em><em>uarray</em>) – the probability assocoated with each value of <code class="docutils literal notranslate"><span class="pre">theta</span></code> that we are trying
+to replicate</p></li>
+<li><p><strong>theta</strong> (<em>(</em><em>N</em><em>,</em><em>d</em><em>) </em><em>nd-array</em>) – A set of <code class="docutils literal notranslate"><span class="pre">N</span></code> values of <code class="docutils literal notranslate"><span class="pre">d</span></code>-dimensional <code class="docutils literal notranslate"><span class="pre">theta</span></code> values over which we shall
+find a multivariate normal distribution over.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.minFunc">
+<code class="sig-name descname">minFunc</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/utils/OptimizeNormalKL.html#OptimizeNormalKL.minFunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.minFunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.optimize">
+<code class="sig-name descname">optimize</code><span class="sig-paren">(</span><em class="sig-param">mu0</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/utils/OptimizeNormalKL.html#OptimizeNormalKL.optimize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.optimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mu0</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-lib.density.utils.divergences">
 <span id="lib-density-utils-divergences-module"></span><h2>lib.density.utils.divergences module<a class="headerlink" href="#module-lib.density.utils.divergences" title="Permalink to this headline">¶</a></h2>
 <dl class="function">

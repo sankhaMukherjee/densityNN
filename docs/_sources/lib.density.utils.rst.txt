@@ -4,6 +4,14 @@ lib.density.utils package
 Submodules
 ----------
 
+lib.density.utils.OptimizeNormalKL module
+-----------------------------------------
+
+.. automodule:: lib.density.utils.OptimizeNormalKL
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 lib.density.utils.divergences module
 ------------------------------------
 
