@@ -61,17 +61,20 @@ class OptimizeNormalKL:
 
     
     def minFunc(self, x):
-        '''[summary]
+        '''internal function: not to be used
         
         Parameters
         ----------
-        x : [type]
-            [description]
+        x : (2d,) nd-array
+            the mean and the std of the arrays that we are trying
+            to optimize coalesed into a signle array
         
         Returns
         -------
-        [type]
-            [description]
+        float
+            The value of the KL divergence for the supplied value of
+            the mu and theta between the provided probability distribution
+            and our approximate probability distribution
         '''
         
         mu = x[:self.d].reshape(1, -1)
@@ -86,17 +89,23 @@ class OptimizeNormalKL:
         return result
     
     def optimize(self, mu0, *args, **kwargs):
-        '''[summary]
+        '''function that is used for the optimization process
+
+        This is going to get optimized values of the :math:`\\mu` and the 
+        :math:`\\Sigma` that would allow a multivariate normal distribution
+        to be generated that will minimize the KL divergence between the
+        provided data and the generated multivariate normal distribution.
         
         Parameters
         ----------
-        mu0 : [type]
-            [description]
+        mu0 : (d,) nd-array
+            The initial guess of the value of the :math:`\\mu`
         
         Returns
         -------
-        [type]
-            [description]
+        (N,) uarray
+            The probability of the values for the normal distribution at the
+            specified points
         '''
         
         sigma0 = np.ones( mu0.shape )
