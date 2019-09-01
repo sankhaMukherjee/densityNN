@@ -104,7 +104,7 @@ class OptimizeNormalKL:
             and our approximate probability distribution
         '''
         
-        mu = x[:self.d].reshape(1, -1)
+        mu = x[:self.d]
         sigma = x[self.d:]
 
         # ---------------------------------------------------------
@@ -144,11 +144,11 @@ class OptimizeNormalKL:
         
         sigma0 = np.ones( mu0.shape )
         x0 = np.hstack( (mu0, sigma0) )
-        
+
         result = minimize( self.minFunc, x0, *args, **kwargs )
         x = result['x']
         
-        self.mu = x[:self.d].reshape(1, -1)
+        self.mu = x[:self.d]
         sigma = x[self.d:]
         # ---------------------------------------------------------
         # Note that sigma mist be positive semidefinite. That means
