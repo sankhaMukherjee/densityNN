@@ -63,6 +63,29 @@ class OptimizeNormalKL:
         
         return
 
+    def pdf(self, theta):
+        '''get the pdf for the values of theta provided
+        
+        Parameters
+        ----------
+        theta : (N,d) nd-array
+            A set of ``N`` values of ``d``-dimensional ``theta`` values over which we shall
+            find a multivariate normal distribution over.
+        
+        Returns
+        -------
+        (N,) uarray
+            the probability assocoated with each value of ``theta`` that we are trying
+            to replicate using the multivariate normal distribution. 
+        '''
+
+        assert self.mu is not None, 'The function hasnt been optimized'
+        assert self.sigma is not None, 'The function hasnt been optimized'
+
+        result = multivariate_normal.pdf( theta, self.mean, self.sigma )
+
+        return result
+
     
     def minFunc(self, x):
         '''internal function: not to be used
@@ -82,7 +105,14 @@ class OptimizeNormalKL:
         '''
         
         mu = x[:self.d].reshape(1, -1)
-        sigma = x[self.d:]#.reshape(1, -1)
+        sigma = x[self.d:]
+
+        # ---------------------------------------------------------
+        # Note that sigma mist be positive semidefinite. That means
+        # that the diagonal elemens must be greater than zero
+        # ---------------------------------------------------------
+        sigma = np.where( sigma<=0, 1e-3 , sigma)
+
         sigma_1 = np.eye(self.d)
         for i, s in enumerate(sigma):
             sigma_1[i,i] = s
@@ -120,6 +150,12 @@ class OptimizeNormalKL:
         
         self.mu = x[:self.d].reshape(1, -1)
         sigma = x[self.d:]
+        # ---------------------------------------------------------
+        # Note that sigma mist be positive semidefinite. That means
+        # that the diagonal elemens must be greater than zero
+        # ---------------------------------------------------------
+        sigma = np.where( sigma<=0, 1e-3 , sigma)
+
         self.sigma = np.eye(self.d)
         for i, s in enumerate(sigma):
             self.sigma[i,i] = s
