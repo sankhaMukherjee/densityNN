@@ -82,7 +82,7 @@ class OptimizeNormalKL:
         assert self.mu is not None, 'The function hasnt been optimized'
         assert self.sigma is not None, 'The function hasnt been optimized'
 
-        result = multivariate_normal.pdf( theta, self.mean, self.sigma )
+        result = multivariate_normal.pdf( theta, self.mu, self.sigma )
 
         return result
 
