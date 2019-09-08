@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="lib.resultGraph package" href="lib.resultGraph.html" />
-    <link rel="prev" title="lib.density package" href="lib.density.html" /> 
+    <link rel="prev" title="lib.density.sampling package" href="lib.density.sampling.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -258,6 +258,25 @@ specified points</p>
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.pdf">
+<code class="sig-name descname">pdf</code><span class="sig-paren">(</span><em class="sig-param">theta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/utils/OptimizeNormalKL.html#OptimizeNormalKL.pdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the pdf for the values of theta provided</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>theta</strong> (<em>(</em><em>N</em><em>,</em><em>d</em><em>) </em><em>nd-array</em>) – A set of <code class="docutils literal notranslate"><span class="pre">N</span></code> values of <code class="docutils literal notranslate"><span class="pre">d</span></code>-dimensional <code class="docutils literal notranslate"><span class="pre">theta</span></code> values over which we shall
+find a multivariate normal distribution over.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the probability assocoated with each value of <code class="docutils literal notranslate"><span class="pre">theta</span></code> that we are trying
+to replicate using the multivariate normal distribution.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(N,) uarray</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -317,7 +336,7 @@ of purposes within this library.</p>
         <a href="lib.resultGraph.html" class="btn btn-neutral float-right" title="lib.resultGraph package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="lib.density.html" class="btn btn-neutral float-left" title="lib.density package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="lib.density.sampling.html" class="btn btn-neutral float-left" title="lib.density.sampling package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

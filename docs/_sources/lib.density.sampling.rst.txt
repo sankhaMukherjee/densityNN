@@ -1,0 +1,22 @@
+lib.density.sampling package
+============================
+
+Submodules
+----------
+
+lib.density.sampling.RejectionSampling module
+---------------------------------------------
+
+.. automodule:: lib.density.sampling.RejectionSampling
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: lib.density.sampling
+   :members:
+   :undoc-members:
+   :show-inheritance:

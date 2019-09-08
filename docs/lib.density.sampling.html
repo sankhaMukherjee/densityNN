@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lib.density.sampling package &mdash; src  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="lib.density.utils package" href="lib.density.utils.html" />
+    <link rel="prev" title="lib.density package" href="lib.density.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> src
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="densityNN.html">densityNN module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="lib.html">lib package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="lib.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="lib.argParsers.html">lib.argParsers package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lib.celery.html">lib.celery package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lib.celeryWorkerExample.html">lib.celeryWorkerExample package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lib.databaseIO.html">lib.databaseIO package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="lib.density.html">lib.density package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="lib.density.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lib.density.html#module-lib.density">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="lib.resultGraph.html">lib.resultGraph package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lib.testLib.html">lib.testLib package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lib.html#module-lib">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logs.html">logs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">modules package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">src</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="lib.html">lib package</a> &raquo;</li>
+        
+          <li><a href="lib.density.html">lib.density package</a> &raquo;</li>
+        
+      <li>lib.density.sampling package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lib.density.sampling.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lib-density-sampling-package">
+<h1>lib.density.sampling package<a class="headerlink" href="#lib-density-sampling-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lib.density.sampling.RejectionSampling">
+<span id="lib-density-sampling-rejectionsampling-module"></span><h2>lib.density.sampling.RejectionSampling module<a class="headerlink" href="#module-lib.density.sampling.RejectionSampling" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lib.density.sampling.RejectionSampling.RejectionSamplerUniform">
+<em class="property">class </em><code class="sig-prename descclassname">lib.density.sampling.RejectionSampling.</code><code class="sig-name descname">RejectionSamplerUniform</code><span class="sig-paren">(</span><em class="sig-param">pdf</em>, <em class="sig-param">ranges=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/sampling/RejectionSampling.html#RejectionSamplerUniform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.sampling.RejectionSampling.RejectionSamplerUniform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Rejection sampler</p>
+<p>This sampler generates sample form a provided proobability distribution
+using the rejection routine. It generates a unifrm density of points wthin
+a specified range, and selects points who are greater than a generated random
+number.</p>
+<p>Given a parameter space <span class="math notranslate nohighlight">\(\mathbf \theta\)</span> and a probability density
+<span class="math notranslate nohighlight">\(p( \mathbf \theta)\)</span>, first samples are generated from a
+uniform distribution, and for  each <span class="math notranslate nohighlight">\(\theta_i \in \mathbf \theta\)</span>,
+a random number <span class="math notranslate nohighlight">\(r_i\)</span> is generated between 0 and 1 and <span class="math notranslate nohighlight">\(\theta_i\)</span> is retained
+in the list when <span class="math notranslate nohighlight">\(r_i &lt; p(\theta_i)\)</span></p>
+<p>It is important to note that when we do rejectioon sampling, due to the nature of
+dropping samples, it takes a long time to gather sufficient samples.</p>
+<p>Initialize the Rejection sampler …</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pdf</strong> (<em>function</em>) – A function that should take an <span class="math notranslate nohighlight">\((N,d)\)</span> nd-array and return a uarray <span class="math notranslate nohighlight">\((N,)\)</span>.
+The input to the function is thus a set of <span class="math notranslate nohighlight">\(N\)</span> vectors, each of length <span class="math notranslate nohighlight">\(d\)</span>.
+This function should return <span class="math notranslate nohighlight">\(N\)</span> values, each the value of the PDF at the
+corresponding values of theta.</p></li>
+<li><p><strong>ranges</strong> (<em>list of lists</em><em>, </em><em>optional</em>) – This should represent the lower and upper bounds for each dimension to be sampled, by
+default <cite>None</cite>. Hence, if there are three dimensions, the list should loook something like
+<code class="docutils literal notranslate"><span class="pre">[[0,</span> <span class="pre">1],</span> <span class="pre">[5,</span> <span class="pre">6],</span> <span class="pre">[0,</span> <span class="pre">1]]</span></code>. Here, for example, the second dimension will be
+sampled between 5 and 6.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="lib.density.sampling.RejectionSampling.RejectionSamplerUniform.sample">
+<code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param">N</em>, <em class="sig-param">ranges=None</em>, <em class="sig-param">maxIter=10000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/sampling/RejectionSampling.html#RejectionSamplerUniform.sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.sampling.RejectionSampling.RejectionSamplerUniform.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>sample data for the given distribution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<em>integer</em>) – The number of data points that you wish to sample</p></li>
+<li><p><strong>ranges</strong> (<em>list of lists</em><em>, </em><em>optional</em>) – This should represent the lower and upper bounds for each dimension to be sampled, by
+default <cite>None</cite>. Hence, if there are three dimensions, the list should loook something like
+<code class="docutils literal notranslate"><span class="pre">[[0,</span> <span class="pre">1],</span> <span class="pre">[5,</span> <span class="pre">6],</span> <span class="pre">[0,</span> <span class="pre">1]]</span></code>. Here, for example, the second dimension will be
+sampled between 5 and 6.</p></li>
+<li><p><strong>maxIter</strong> (<em>int</em><em>, </em><em>optional</em>) – This is the total number of iterations that will be used for sampling. This should be set
+if your region is particularly sparse and the sampling angorithm isnt able to get samples
+with sufficient density values. By default this value is 10000. set this too <code class="docutils literal notranslate"><span class="pre">None</span></code>
+to turn ooff this feature.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The samples from the distribution. Note that, if the <code class="docutils literal notranslate"><span class="pre">maxIter</span></code> is too less, then the
+entire <span class="math notranslate nohighlight">\(N\)</span> samples might not be returned.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>nd-array <span class="math notranslate nohighlight">\((N,d)\)</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lib.density.sampling">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lib.density.sampling" title="Permalink to this headline">¶</a></h2>
+<p>algorithms useful for sampling from distributions</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lib.density.utils.html" class="btn btn-neutral float-right" title="lib.density.utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lib.density.html" class="btn btn-neutral float-left" title="lib.density package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Author
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
