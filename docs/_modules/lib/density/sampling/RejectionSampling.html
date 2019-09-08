@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lib.density.sampling.RejectionSampling &mdash; src  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> src
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../densityNN.html">densityNN module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../lib.html">lib package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../logs.html">logs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">modules package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">src</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>lib.density.sampling.RejectionSampling</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lib.density.sampling.RejectionSampling</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="RejectionSamplerUniform"><a class="viewcode-back" href="../../../../lib.density.sampling.html#lib.density.sampling.RejectionSampling.RejectionSamplerUniform">[docs]</a><span class="k">class</span> <span class="nc">RejectionSamplerUniform</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Rejection sampler</span>
+
+<span class="sd">    This sampler generates sample form a provided proobability distribution </span>
+<span class="sd">    using the rejection routine. It generates a unifrm density of points wthin </span>
+<span class="sd">    a specified range, and selects points who are greater than a generated random</span>
+<span class="sd">    number.</span>
+
+<span class="sd">    Given a parameter space :math:`\\mathbf \\theta` and a probability density </span>
+<span class="sd">    :math:`p( \\mathbf \\theta)`, first samples are generated from a </span>
+<span class="sd">    uniform distribution, and for  each :math:`\\theta_i \in \\mathbf \\theta`, </span>
+<span class="sd">    a random number :math:`r_i` is generated between 0 and 1 and :math:`\\theta_i` is retained </span>
+<span class="sd">    in the list when :math:`r_i &lt; p(\\theta_i)`</span>
+
+<span class="sd">    It is important to note that when we do rejectioon sampling, due to the nature of </span>
+<span class="sd">    dropping samples, it takes a long time to gather sufficient samples.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pdf</span><span class="p">,</span> <span class="n">ranges</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Initialize the Rejection sampler ...</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pdf : function</span>
+<span class="sd">            A function that should take an :math:`(N,d)` nd-array and return a uarray :math:`(N,)`.</span>
+<span class="sd">            The input to the function is thus a set of :math:`N` vectors, each of length :math:`d`.</span>
+<span class="sd">            This function should return :math:`N` values, each the value of the PDF at the </span>
+<span class="sd">            corresponding values of theta.</span>
+<span class="sd">        ranges : list of lists, optional</span>
+<span class="sd">            This should represent the lower and upper bounds for each dimension to be sampled, by </span>
+<span class="sd">            default `None`. Hence, if there are three dimensions, the list should loook something like</span>
+<span class="sd">            ``[[0, 1], [5, 6], [0, 1]]``. Here, for example, the second dimension will be </span>
+<span class="sd">            sampled between 5 and 6.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pdf</span> <span class="o">=</span> <span class="n">pdf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ranges</span> <span class="o">=</span> <span class="n">ranges</span>
+        <span class="k">if</span> <span class="n">ranges</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+<div class="viewcode-block" id="RejectionSamplerUniform.sample"><a class="viewcode-back" href="../../../../lib.density.sampling.html#lib.density.sampling.RejectionSampling.RejectionSamplerUniform.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">ranges</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">maxIter</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;sample data for the given distribution</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        N : integer</span>
+<span class="sd">            The number of data points that you wish to sample</span>
+<span class="sd">        ranges : list of lists, optional</span>
+<span class="sd">            This should represent the lower and upper bounds for each dimension to be sampled, by </span>
+<span class="sd">            default `None`. Hence, if there are three dimensions, the list should loook something like</span>
+<span class="sd">            ``[[0, 1], [5, 6], [0, 1]]``. Here, for example, the second dimension will be </span>
+<span class="sd">            sampled between 5 and 6.</span>
+<span class="sd">        maxIter : int, optional</span>
+<span class="sd">            This is the total number of iterations that will be used for sampling. This should be set</span>
+<span class="sd">            if your region is particularly sparse and the sampling angorithm isnt able to get samples</span>
+<span class="sd">            with sufficient density values. By default this value is 10000. set this too ``None``</span>
+<span class="sd">            to turn ooff this feature.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        nd-array :math:`(N,d)`</span>
+<span class="sd">            The samples from the distribution. Note that, if the ``maxIter`` is too less, then the </span>
+<span class="sd">            entire :math:`N` samples might not be returned.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">:</span>
+            
+            <span class="k">assert</span> <span class="ow">not</span> <span class="p">((</span><span class="n">ranges</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ranges</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)),</span> <span class="s1">&#39;Unspecified range&#39;</span>
+            <span class="k">if</span> <span class="n">ranges</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ranges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranges</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span>
+            <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">ranges</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span> <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">)</span> <span class="p">)</span>
+            <span class="n">p_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">N</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">p_x</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">values</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">result</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span>
+                
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">maxIter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;=</span><span class="n">maxIter</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[:</span><span class="n">N</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">result</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Author
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

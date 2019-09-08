@@ -151,6 +151,10 @@
 <span></span><span class="kn">from</span> <span class="nn">logs</span> <span class="k">import</span> <span class="n">logDecorator</span> <span class="k">as</span> <span class="n">lD</span>
 <span class="kn">import</span> <span class="nn">jsonref</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">minimize</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">multivariate_normal</span>
+
+<span class="kn">from</span> <span class="nn">lib.density.utils</span> <span class="k">import</span> <span class="n">divergences</span>
 
 <span class="n">config</span>   <span class="o">=</span> <span class="n">jsonref</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;../config/config.json&#39;</span><span class="p">))</span>
 <span class="n">logBase</span>  <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;logging&#39;</span><span class="p">][</span><span class="s1">&#39;logBase&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.lib.density.utils.OptimizeNormalKL&#39;</span>
@@ -209,6 +213,29 @@
         
         <span class="k">return</span>
 
+<div class="viewcode-block" id="OptimizeNormalKL.pdf"><a class="viewcode-back" href="../../../../lib.density.utils.html#lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.pdf">[docs]</a>    <span class="k">def</span> <span class="nf">pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;get the pdf for the values of theta provided</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        theta : (N,d) nd-array</span>
+<span class="sd">            A set of ``N`` values of ``d``-dimensional ``theta`` values over which we shall</span>
+<span class="sd">            find a multivariate normal distribution over.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        (N,) uarray</span>
+<span class="sd">            the probability assocoated with each value of ``theta`` that we are trying</span>
+<span class="sd">            to replicate using the multivariate normal distribution. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;The function hasnt been optimized&#39;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;The function hasnt been optimized&#39;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">multivariate_normal</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span> <span class="n">theta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
     
 <div class="viewcode-block" id="OptimizeNormalKL.minFunc"><a class="viewcode-back" href="../../../../lib.density.utils.html#lib.density.utils.OptimizeNormalKL.OptimizeNormalKL.minFunc">[docs]</a>    <span class="k">def</span> <span class="nf">minFunc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;internal function: not to be used</span>
@@ -227,13 +254,20 @@
 <span class="sd">            and our approximate probability distribution</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         
-        <span class="n">mu</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">sigma</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">:]</span><span class="c1">#.reshape(1, -1)</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">]</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">:]</span>
+
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="c1"># Note that sigma mist be positive semidefinite. That means</span>
+        <span class="c1"># that the diagonal elemens must be greater than zero</span>
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span> <span class="n">sigma</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1e-3</span> <span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+
         <span class="n">sigma_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
             <span class="n">sigma_1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
         
-        <span class="n">q</span> <span class="o">=</span> <span class="n">multivariate_normal</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span> <span class="n">theta</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma_1</span> <span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">multivariate_normal</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma_1</span> <span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">divergences</span><span class="o">.</span><span class="n">D_KL</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">result</span></div>
@@ -260,12 +294,18 @@
         
         <span class="n">sigma0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span> <span class="n">mu0</span><span class="o">.</span><span class="n">shape</span> <span class="p">)</span>
         <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span> <span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">sigma0</span><span class="p">)</span> <span class="p">)</span>
-        
+
         <span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">minFunc</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span> <span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">]</span>
         <span class="n">sigma</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">:]</span>
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="c1"># Note that sigma mist be positive semidefinite. That means</span>
+        <span class="c1"># that the diagonal elemens must be greater than zero</span>
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span> <span class="n">sigma</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1e-3</span> <span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
