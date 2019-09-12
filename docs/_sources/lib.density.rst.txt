@@ -6,6 +6,7 @@ Subpackages
 
 .. toctree::
 
+   lib.density.integrate
    lib.density.sampling
    lib.density.utils
 
