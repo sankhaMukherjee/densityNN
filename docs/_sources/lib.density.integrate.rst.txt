@@ -1,0 +1,22 @@
+lib.density.integrate package
+=============================
+
+Submodules
+----------
+
+lib.density.integrate.importanceSampling module
+-----------------------------------------------
+
+.. automodule:: lib.density.integrate.importanceSampling
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: lib.density.integrate
+   :members:
+   :undoc-members:
+   :show-inheritance:
