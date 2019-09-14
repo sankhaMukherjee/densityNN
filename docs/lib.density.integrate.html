@@ -203,26 +203,30 @@ dimensional vector space.</p></li>
 <li><p><strong>p</strong> (<em>function</em>) – This takes a numpy nd-array of dimensions <span class="math notranslate nohighlight">\((N,d)\)</span> representing a set of <span class="math notranslate nohighlight">\(N\)</span> vectors
 of dimension <span class="math notranslate nohighlight">\(d\)</span> and return <span class="math notranslate nohighlight">\(N\)</span> values that represents the probability density function
 over the <span class="math notranslate nohighlight">\(d\)</span> dimensional space.</p></li>
-<li><p><strong>ranges</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – [description], by default None</p></li>
+<li><p><strong>ranges</strong> (<em>list of lists</em><em>, </em><em>optional</em>) – This is a list of <span class="math notranslate nohighlight">\(d\)</span> ranges, one for each dimension over which the <span class="math notranslate nohighlight">\(d\)</span> dimensional vector
+space is going to be uniformly sampled, by default <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 </ul>
 </dd>
 </dl>
 <dl class="method">
 <dt id="lib.density.integrate.importanceSampling.ImportanceSampleIntegrateUniform.integrate">
 <code class="sig-name descname">integrate</code><span class="sig-paren">(</span><em class="sig-param">N</em>, <em class="sig-param">ranges=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/integrate/importanceSampling.html#ImportanceSampleIntegrateUniform.integrate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.integrate.importanceSampling.ImportanceSampleIntegrateUniform.integrate" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
+<dd><p>Integrate the function <code class="docutils literal notranslate"><span class="pre">f</span></code> over the <span class="math notranslate nohighlight">\(d\)</span> dimensional space.</p>
+<p>The integration is performed as a sum with <span class="math notranslate nohighlight">\(N\)</span> points sampled throough
+rejection sampling with the probability density <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>N</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
-<li><p><strong>ranges</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – [description], by default None</p></li>
+<li><p><strong>N</strong> (<em>int</em>) – Number of points to use as samples for the integration</p></li>
+<li><p><strong>ranges</strong> (<em>list of lists</em><em>, </em><em>optional</em>) – This is a list of <span class="math notranslate nohighlight">\(d\)</span> ranges, one for each dimension over which the <span class="math notranslate nohighlight">\(d\)</span> dimensional vector
+space is going to be uniformly sampled, by default <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>[description]</p>
+<dd class="field-even"><p>The result of the integration.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>[type]</p>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>

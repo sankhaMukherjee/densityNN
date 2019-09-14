@@ -311,10 +311,10 @@ within the same file)</p></li>
 girected graph. This assumes that configuration files for all the
 modules are present in the <code class="docutils literal notranslate"><span class="pre">config/modules/</span></code> folder. The files
 should be JSON files with the folliwing specifications:</p>
-<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;inputs&quot;</span>  <span class="p">:</span> <span class="p">{},</span>
-    <span class="nt">&quot;outputs&quot;</span> <span class="p">:</span> <span class="p">{},</span>
-    <span class="nt">&quot;params&quot;</span>  <span class="p">:</span> <span class="p">{}</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;inputs&quot;</span>  <span class="o">:</span> <span class="p">{},</span>
+    <span class="s2">&quot;outputs&quot;</span> <span class="o">:</span> <span class="p">{},</span>
+    <span class="s2">&quot;params&quot;</span>  <span class="o">:</span> <span class="p">{}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -325,29 +325,29 @@ case, they should be represented by empty dictionaries as shown above.</p>
 into the dictionary that is referred to by the keyword <code class="docutils literal notranslate"><span class="pre">params</span></code>.</p>
 <p>An examples of what can possibly go into the <code class="docutils literal notranslate"><span class="pre">inputs</span></code> and <code class="docutils literal notranslate"><span class="pre">outputs</span></code>
 is as follows:</p>
-<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span>&quot;inputs&quot;: {
-    &quot;abc1&quot;:{
-        &quot;type&quot;        : &quot;file-csv&quot;,
-        &quot;location&quot;    : &quot;../data/abc1.csv&quot;,
-        &quot;description&quot; : &quot;describe how the data is arranged&quot;
-    }
-},
-&quot;outputs&quot; : {
-    &quot;abc2&quot;:{
-        &quot;type&quot;        : &quot;dbTable&quot;,
-        &quot;location&quot;    : &quot;&lt;dbName.schemaName.tableName&gt;&quot;
-        &quot;dbHost&quot;      : &quot;&lt;dbHost&gt;&quot;,
-        &quot;dbPort&quot;      : &quot;&lt;dbHost&gt;&quot;,
-        &quot;dbName&quot;      : &quot;&lt;dbName&gt;&quot;,
-        &quot;description&quot; : &quot;description of the table&quot;
-    },
-    &quot;abc3&quot;:{
-        &quot;type&quot;        : &quot;file-png&quot;,
-        &quot;location&quot;    : &quot;../reports/img/Fig1.png&quot;,
-        &quot;description&quot; : &quot;some description of the data&quot;
-    }
-},
-&quot;params&quot; : {}
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;inputs&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;abc1&quot;</span><span class="o">:</span><span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span>        <span class="o">:</span> <span class="s2">&quot;file-csv&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;location&quot;</span>    <span class="o">:</span> <span class="s2">&quot;../data/abc1.csv&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span> <span class="o">:</span> <span class="s2">&quot;describe how the data is arranged&quot;</span>
+    <span class="p">}</span>
+<span class="p">},</span>
+<span class="s2">&quot;outputs&quot;</span> <span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;abc2&quot;</span><span class="o">:</span><span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span>        <span class="o">:</span> <span class="s2">&quot;dbTable&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;location&quot;</span>    <span class="o">:</span> <span class="s2">&quot;&lt;dbName.schemaName.tableName&gt;&quot;</span>
+        <span class="s2">&quot;dbHost&quot;</span>      <span class="o">:</span> <span class="s2">&quot;&lt;dbHost&gt;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dbPort&quot;</span>      <span class="o">:</span> <span class="s2">&quot;&lt;dbHost&gt;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dbName&quot;</span>      <span class="o">:</span> <span class="s2">&quot;&lt;dbName&gt;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span> <span class="o">:</span> <span class="s2">&quot;description of the table&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;abc3&quot;</span><span class="o">:</span><span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span>        <span class="o">:</span> <span class="s2">&quot;file-png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;location&quot;</span>    <span class="o">:</span> <span class="s2">&quot;../reports/img/Fig1.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span> <span class="o">:</span> <span class="s2">&quot;some description of the data&quot;</span>
+    <span class="p">}</span>
+<span class="p">},</span>
+<span class="s2">&quot;params&quot;</span> <span class="o">:</span> <span class="p">{}</span>
 </pre></div>
 </div>
 <p>In the above code block, the module will comprise of a single input with

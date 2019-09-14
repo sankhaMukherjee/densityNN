@@ -5,7 +5,7 @@ girected graph. This assumes that configuration files for all the
 modules are present in the ``config/modules/`` folder. The files
 should be JSON files with the folliwing specifications:
 
-.. code-block:: JSON
+.. code-block:: javascript
 
     {
         "inputs"  : {},
@@ -23,7 +23,7 @@ into the dictionary that is referred to by the keyword ``params``.
 An examples of what can possibly go into the ``inputs`` and ``outputs``
 is as follows:
 
-.. code-block:: JSON
+.. code-block:: javascript
 
     "inputs": {
         "abc1":{
