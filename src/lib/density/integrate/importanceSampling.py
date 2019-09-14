@@ -1,4 +1,5 @@
 import numpy as np
+from lib.density.sampling import RejectionSampling as RS
 
 class ImportanceSampleIntegrateUniform():
     '''Importance Sampling is the idea that we want to solve the integral of the form:
@@ -27,8 +28,9 @@ class ImportanceSampleIntegrateUniform():
             This takes a numpy nd-array of dimensions :math:`(N,d)` representing a set of :math:`N` vectors 
             of dimension :math:`d` and return :math:`N` values that represents the probability density function
             over the :math:`d` dimensional space.
-        ranges : [type], optional
-            [description], by default None
+        ranges : list of lists, optional
+            This is a list of :math:`d` ranges, one for each dimension over which the :math:`d` dimensional vector
+            space is going to be uniformly sampled, by default ``None``
         '''
         self.f = f
         self.p = p
@@ -39,19 +41,23 @@ class ImportanceSampleIntegrateUniform():
         return
     
     def integrate(self, N, ranges = None):
-        '''[summary]
+        '''Integrate the function ``f`` over the :math:`d` dimensional space. 
+
+        The integration is performed as a sum with :math:`N` points sampled throough
+        rejection sampling with the probability density ``p``.
         
         Parameters
         ----------
-        N : [type]
-            [description]
-        ranges : [type], optional
-            [description], by default None
+        N : int
+            Number of points to use as samples for the integration
+        ranges : list of lists, optional
+            This is a list of :math:`d` ranges, one for each dimension over which the :math:`d` dimensional vector
+            space is going to be uniformly sampled, by default ``None``
         
         Returns
         -------
-        [type]
-            [description]
+        float
+            The result of the integration.
         '''
         
         result = None
@@ -61,7 +67,7 @@ class ImportanceSampleIntegrateUniform():
         assert ranges is not None, 'Ranges not provided for uniform sampling'
         d = len(ranges)
         
-        rSamples = RejectionSamplerUniform(self.p, ranges)
+        rSamples = RS.RejectionSamplerUniform(self.p, ranges)
         samples = rSamples.sample(N)
         result = self.f( samples ).sum()/N
         

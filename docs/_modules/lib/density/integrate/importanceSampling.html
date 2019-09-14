@@ -149,6 +149,7 @@
             
   <h1>Source code for lib.density.integrate.importanceSampling</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">lib.density.sampling</span> <span class="k">import</span> <span class="n">RejectionSampling</span> <span class="k">as</span> <span class="n">RS</span>
 
 <div class="viewcode-block" id="ImportanceSampleIntegrateUniform"><a class="viewcode-back" href="../../../../lib.density.integrate.html#lib.density.integrate.importanceSampling.ImportanceSampleIntegrateUniform">[docs]</a><span class="k">class</span> <span class="nc">ImportanceSampleIntegrateUniform</span><span class="p">():</span>
     <span class="sd">&#39;&#39;&#39;Importance Sampling is the idea that we want to solve the integral of the form:</span>
@@ -177,8 +178,9 @@
 <span class="sd">            This takes a numpy nd-array of dimensions :math:`(N,d)` representing a set of :math:`N` vectors </span>
 <span class="sd">            of dimension :math:`d` and return :math:`N` values that represents the probability density function</span>
 <span class="sd">            over the :math:`d` dimensional space.</span>
-<span class="sd">        ranges : [type], optional</span>
-<span class="sd">            [description], by default None</span>
+<span class="sd">        ranges : list of lists, optional</span>
+<span class="sd">            This is a list of :math:`d` ranges, one for each dimension over which the :math:`d` dimensional vector</span>
+<span class="sd">            space is going to be uniformly sampled, by default ``None``</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
@@ -189,19 +191,23 @@
         <span class="k">return</span>
     
 <div class="viewcode-block" id="ImportanceSampleIntegrateUniform.integrate"><a class="viewcode-back" href="../../../../lib.density.integrate.html#lib.density.integrate.importanceSampling.ImportanceSampleIntegrateUniform.integrate">[docs]</a>    <span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">ranges</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;[summary]</span>
+        <span class="sd">&#39;&#39;&#39;Integrate the function ``f`` over the :math:`d` dimensional space. </span>
+
+<span class="sd">        The integration is performed as a sum with :math:`N` points sampled throough</span>
+<span class="sd">        rejection sampling with the probability density ``p``.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        N : [type]</span>
-<span class="sd">            [description]</span>
-<span class="sd">        ranges : [type], optional</span>
-<span class="sd">            [description], by default None</span>
+<span class="sd">        N : int</span>
+<span class="sd">            Number of points to use as samples for the integration</span>
+<span class="sd">        ranges : list of lists, optional</span>
+<span class="sd">            This is a list of :math:`d` ranges, one for each dimension over which the :math:`d` dimensional vector</span>
+<span class="sd">            space is going to be uniformly sampled, by default ``None``</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        [type]</span>
-<span class="sd">            [description]</span>
+<span class="sd">        float</span>
+<span class="sd">            The result of the integration.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         
         <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
@@ -211,7 +217,7 @@
         <span class="k">assert</span> <span class="n">ranges</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Ranges not provided for uniform sampling&#39;</span>
         <span class="n">d</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span>
         
-        <span class="n">rSamples</span> <span class="o">=</span> <span class="n">RejectionSamplerUniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">ranges</span><span class="p">)</span>
+        <span class="n">rSamples</span> <span class="o">=</span> <span class="n">RS</span><span class="o">.</span><span class="n">RejectionSamplerUniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">ranges</span><span class="p">)</span>
         <span class="n">samples</span> <span class="o">=</span> <span class="n">rSamples</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span> <span class="n">samples</span> <span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="n">N</span>
         
