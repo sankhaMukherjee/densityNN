@@ -180,6 +180,130 @@
 <div class="section" id="module-lib.density.integrate.importanceSampling">
 <span id="lib-density-integrate-importancesampling-module"></span><h2>lib.density.integrate.importanceSampling module<a class="headerlink" href="#module-lib.density.integrate.importanceSampling" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
+<dt id="lib.density.integrate.importanceSampling.ImportanceSampleIntegrateNormal">
+<em class="property">class </em><code class="sig-prename descclassname">lib.density.integrate.importanceSampling.</code><code class="sig-name descname">ImportanceSampleIntegrateNormal</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">p</em>, <em class="sig-param">ranges=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/integrate/importanceSampling.html#ImportanceSampleIntegrateNormal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.integrate.importanceSampling.ImportanceSampleIntegrateNormal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Importance Sampling is the idea that we want to solve the integral of the form:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb E(f) = \int_{-\infty}^{\infty} f(\mathbf w) p(\mathbf w)  d \mathbf w\]</div>
+<p>We shall sample directly using the multivariate Gaussian distribution that we know, rather than using
+uniform sampling. That should significantly reduce the amount of time required. However for this we shall
+need to change the equations a bit.</p>
+<div class="math notranslate nohighlight">
+    \begin{align*}
+    \mathbb E(f) &amp;= \int_{-\infty}^{\infty} f(\mathbf w) p(\mathbf w)  \frac {q(\mathbf w)} {q(\mathbf w)} d \mathbf w \\
+                  &amp;= \int_{-\infty}^{\infty} \Big( f(\mathbf w)  \frac {p(\mathbf w)} {q(\mathbf w)} \Big) q(\mathbf w)  d \mathbf w \\
+                  &amp;= \frac 1 N \sum_{i=1}^N w_s{f(w_i)}, w_i \sim q(\mathbf w)
+     \end{align*}</div><p>The important thing about this transformation is that the sampling form another distribution (like <span class="math notranslate nohighlight">\(q(\mathbf w)\)</span>) is typically easier to do.</p>
+<p>For unnormalized distributions, we can use the following formula instead:</p>
+<div class="math notranslate nohighlight">
+    \begin{align*}
+    \mathbb E(f) &amp;= \frac 1 {\sum_{i=1}^N w_s} \sum_{i=1}^N w_s{f(w_i)}, w_i \sim q(\mathbf w)
+    \end{align*}</div><p>initialize the Importance Sampler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>function</em>) – This takes a numpy nd-array of dimensions <span class="math notranslate nohighlight">\((N,d)\)</span> representing a set of <span class="math notranslate nohighlight">\(N\)</span> vectors
+of dimension <span class="math notranslate nohighlight">\(d\)</span> and return <span class="math notranslate nohighlight">\(N\)</span> values that needs to be integrated over the <span class="math notranslate nohighlight">\(d\)</span>
+dimensional vector space.</p></li>
+<li><p><strong>p</strong> (<em>function</em>) – This takes a numpy nd-array of dimensions <span class="math notranslate nohighlight">\((N,d)\)</span> representing a set of <span class="math notranslate nohighlight">\(N\)</span> vectors
+of dimension <span class="math notranslate nohighlight">\(d\)</span> and return <span class="math notranslate nohighlight">\(N\)</span> values that represents the probability density function
+over the <span class="math notranslate nohighlight">\(d\)</span> dimensional space.</p></li>
+<li><p><strong>ranges</strong> (<em>list of lists</em><em>, </em><em>optional</em>) – This is a list of <span class="math notranslate nohighlight">\(d\)</span> ranges, one for each dimension over which the <span class="math notranslate nohighlight">\(d\)</span> dimensional vector
+space is going to be uniformly sampled, by default <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="lib.density.integrate.importanceSampling.ImportanceSampleIntegrateNormal.integrate">
+<code class="sig-name descname">integrate</code><span class="sig-paren">(</span><em class="sig-param">N</em>, <em class="sig-param">ranges=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/integrate/importanceSampling.html#ImportanceSampleIntegrateNormal.integrate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.integrate.importanceSampling.ImportanceSampleIntegrateNormal.integrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integrate the function <code class="docutils literal notranslate"><span class="pre">f</span></code> over the <span class="math notranslate nohighlight">\(d\)</span> dimensional space.</p>
+<p>The integration is performed as a sum with <span class="math notranslate nohighlight">\(N\)</span> points sampled throough
+rejection sampling with the probability density <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<em>int</em>) – Number of points to use as samples for the integration</p></li>
+<li><p><strong>ranges</strong> (<em>list of lists</em><em>, </em><em>optional</em>) – This is a list of <span class="math notranslate nohighlight">\(d\)</span> ranges, one for each dimension over which the <span class="math notranslate nohighlight">\(d\)</span> dimensional vector
+space is going to be uniformly sampled, by default <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The result of the integration.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="lib.density.integrate.importanceSampling.ImportanceSampleIntegrateNormalAdaptive">
+<em class="property">class </em><code class="sig-prename descclassname">lib.density.integrate.importanceSampling.</code><code class="sig-name descname">ImportanceSampleIntegrateNormalAdaptive</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">p</em>, <em class="sig-param">ranges=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/integrate/importanceSampling.html#ImportanceSampleIntegrateNormalAdaptive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.integrate.importanceSampling.ImportanceSampleIntegrateNormalAdaptive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Importance Sampling is the idea that we want to solve the integral of the form:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb E(f) = \int_{-\infty}^{\infty} f(\mathbf w) p(\mathbf w)  d \mathbf w\]</div>
+<p>Rather than uniform sampling, it is possible that we use a Gaussian distribution to sample form. This
+can be easily accomplished if we use a Gaussian distribution <span class="math notranslate nohighlight">\(q\)</span> that closely represents our
+required distribution <span class="math notranslate nohighlight">\(p\)</span>. This can be donee by finding the parameters of a multivariate Gaussian
+distribution that closely matches the required distribution using the KL-divergence.</p>
+<p>We shall sample directly using the multivariate Gaussian distribution that we know, rather than using
+uniform sampling. That should significantly reduce the amount of time required. However for this we shall
+need to change the equations a bit.</p>
+<div class="math notranslate nohighlight">
+    \begin{align*}
+    \mathbb E(f) &amp;= \int_{-\infty}^{\infty} f(\mathbf w) p(\mathbf w)  \frac {q(\mathbf w)} {q(\mathbf w)} d \mathbf w \\
+                  &amp;= \int_{-\infty}^{\infty} \Big( f(\mathbf w)  \frac {p(\mathbf w)} {q(\mathbf w)} \Big) q(\mathbf w)  d \mathbf w \\
+                  &amp;= \frac 1 N \sum_{i=1}^N w_s{f(w_i)}, w_i \sim q(\mathbf w)
+     \end{align*}</div><p>The important thing about this transformation is that the sampling form another distribution (like <span class="math notranslate nohighlight">\(q(\mathbf w)\)</span>) is typically easier to do.</p>
+<p>For unnormalized distributions, we can use the following formula instead:</p>
+<div class="math notranslate nohighlight">
+    \begin{align*}
+    \mathbb E(f) &amp;= \frac 1 {\sum_{i=1}^N w_s} \sum_{i=1}^N w_s{f(w_i)}, w_i \sim q(\mathbf w)
+    \end{align*}</div><p>initialize the Importance Sampler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>function</em>) – This takes a numpy nd-array of dimensions <span class="math notranslate nohighlight">\((N,d)\)</span> representing a set of <span class="math notranslate nohighlight">\(N\)</span> vectors
+of dimension <span class="math notranslate nohighlight">\(d\)</span> and return <span class="math notranslate nohighlight">\(N\)</span> values that needs to be integrated over the <span class="math notranslate nohighlight">\(d\)</span>
+dimensional vector space.</p></li>
+<li><p><strong>p</strong> (<em>function</em>) – This takes a numpy nd-array of dimensions <span class="math notranslate nohighlight">\((N,d)\)</span> representing a set of <span class="math notranslate nohighlight">\(N\)</span> vectors
+of dimension <span class="math notranslate nohighlight">\(d\)</span> and return <span class="math notranslate nohighlight">\(N\)</span> values that represents the probability density function
+over the <span class="math notranslate nohighlight">\(d\)</span> dimensional space.</p></li>
+<li><p><strong>ranges</strong> (<em>list of lists</em><em>, </em><em>optional</em>) – This is a list of <span class="math notranslate nohighlight">\(d\)</span> ranges, one for each dimension over which the <span class="math notranslate nohighlight">\(d\)</span> dimensional vector
+space is going to be uniformly sampled, by default <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="lib.density.integrate.importanceSampling.ImportanceSampleIntegrateNormalAdaptive.integrate">
+<code class="sig-name descname">integrate</code><span class="sig-paren">(</span><em class="sig-param">N</em>, <em class="sig-param">ranges=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/integrate/importanceSampling.html#ImportanceSampleIntegrateNormalAdaptive.integrate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.integrate.importanceSampling.ImportanceSampleIntegrateNormalAdaptive.integrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integrate the function <code class="docutils literal notranslate"><span class="pre">f</span></code> over the <span class="math notranslate nohighlight">\(d\)</span> dimensional space.</p>
+<p>The integration is performed as a sum with <span class="math notranslate nohighlight">\(N\)</span> points sampled throough
+rejection sampling with the probability density <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<em>int</em>) – Number of points to use as samples for the integration</p></li>
+<li><p><strong>ranges</strong> (<em>list of lists</em><em>, </em><em>optional</em>) – This is a list of <span class="math notranslate nohighlight">\(d\)</span> ranges, one for each dimension over which the <span class="math notranslate nohighlight">\(d\)</span> dimensional vector
+space is going to be uniformly sampled, by default <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The result of the integration.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="lib.density.integrate.importanceSampling.ImportanceSampleIntegrateUniform">
 <em class="property">class </em><code class="sig-prename descclassname">lib.density.integrate.importanceSampling.</code><code class="sig-name descname">ImportanceSampleIntegrateUniform</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">p</em>, <em class="sig-param">ranges=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/integrate/importanceSampling.html#ImportanceSampleIntegrateUniform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.integrate.importanceSampling.ImportanceSampleIntegrateUniform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
