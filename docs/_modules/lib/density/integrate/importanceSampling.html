@@ -150,6 +150,9 @@
   <h1>Source code for lib.density.integrate.importanceSampling</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">lib.density.sampling</span> <span class="k">import</span> <span class="n">RejectionSampling</span> <span class="k">as</span> <span class="n">RS</span>
+<span class="kn">from</span> <span class="nn">lib.density.utils</span> <span class="k">import</span> <span class="n">OptimizeNormalKL</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">multivariate_normal</span>
+
 
 <div class="viewcode-block" id="ImportanceSampleIntegrateUniform"><a class="viewcode-back" href="../../../../lib.density.integrate.html#lib.density.integrate.importanceSampling.ImportanceSampleIntegrateUniform">[docs]</a><span class="k">class</span> <span class="nc">ImportanceSampleIntegrateUniform</span><span class="p">():</span>
     <span class="sd">&#39;&#39;&#39;Importance Sampling is the idea that we want to solve the integral of the form:</span>
@@ -220,6 +223,213 @@
         <span class="n">rSamples</span> <span class="o">=</span> <span class="n">RS</span><span class="o">.</span><span class="n">RejectionSamplerUniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">ranges</span><span class="p">)</span>
         <span class="n">samples</span> <span class="o">=</span> <span class="n">rSamples</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span> <span class="n">samples</span> <span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="n">N</span>
+        
+        <span class="k">return</span> <span class="n">result</span></div></div>
+
+<div class="viewcode-block" id="ImportanceSampleIntegrateNormal"><a class="viewcode-back" href="../../../../lib.density.integrate.html#lib.density.integrate.importanceSampling.ImportanceSampleIntegrateNormal">[docs]</a><span class="k">class</span> <span class="nc">ImportanceSampleIntegrateNormal</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Importance Sampling is the idea that we want to solve the integral of the form:</span>
+
+<span class="sd">        .. math:: \\mathbb E(f) = \\int_{-\\infty}^{\\infty} f(\\mathbf w) p(\\mathbf w)  d \\mathbf w</span>
+
+<span class="sd">        We shall sample directly using the multivariate Gaussian distribution that we know, rather than using </span>
+<span class="sd">        uniform sampling. That should significantly reduce the amount of time required. However for this we shall </span>
+<span class="sd">        need to change the equations a bit.</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            :nowrap:</span>
+
+<span class="sd">                \\begin{align*}</span>
+<span class="sd">                \\mathbb E(f) &amp;= \\int_{-\\infty}^{\\infty} f(\\mathbf w) p(\\mathbf w)  \\frac {q(\\mathbf w)} {q(\\mathbf w)} d \\mathbf w \\\\</span>
+<span class="sd">                              &amp;= \\int_{-\\infty}^{\\infty} \\Big( f(\\mathbf w)  \\frac {p(\\mathbf w)} {q(\\mathbf w)} \Big) q(\\mathbf w)  d \\mathbf w \\\\</span>
+<span class="sd">                              &amp;= \\frac 1 N \\sum_{i=1}^N w_s{f(w_i)}, w_i \\sim q(\\mathbf w)</span>
+<span class="sd">                 \\end{align*}</span>
+
+
+<span class="sd">        The important thing about this transformation is that the sampling form another distribution (like :math:`q(\mathbf w)`) is typically easier to do.</span>
+
+<span class="sd">        For unnormalized distributions, we can use the following formula instead:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            :nowrap:</span>
+
+<span class="sd">                \\begin{align*}</span>
+<span class="sd">                \\mathbb E(f) &amp;= \\frac 1 {\\sum_{i=1}^N w_s} \\sum_{i=1}^N w_s{f(w_i)}, w_i \\sim q(\\mathbf w)</span>
+<span class="sd">                \\end{align*}</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">ranges</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;initialize the Importance Sampler.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        f : function</span>
+<span class="sd">            This takes a numpy nd-array of dimensions :math:`(N,d)` representing a set of :math:`N` vectors </span>
+<span class="sd">            of dimension :math:`d` and return :math:`N` values that needs to be integrated over the :math:`d`</span>
+<span class="sd">            dimensional vector space.</span>
+<span class="sd">        p : function</span>
+<span class="sd">            This takes a numpy nd-array of dimensions :math:`(N,d)` representing a set of :math:`N` vectors </span>
+<span class="sd">            of dimension :math:`d` and return :math:`N` values that represents the probability density function</span>
+<span class="sd">            over the :math:`d` dimensional space.</span>
+<span class="sd">        ranges : list of lists, optional</span>
+<span class="sd">            This is a list of :math:`d` ranges, one for each dimension over which the :math:`d` dimensional vector</span>
+<span class="sd">            space is going to be uniformly sampled, by default ``None``</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ranges</span> <span class="o">=</span> <span class="n">ranges</span>
+        <span class="k">if</span> <span class="n">ranges</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+<div class="viewcode-block" id="ImportanceSampleIntegrateNormal.integrate"><a class="viewcode-back" href="../../../../lib.density.integrate.html#lib.density.integrate.importanceSampling.ImportanceSampleIntegrateNormal.integrate">[docs]</a>    <span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">ranges</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Integrate the function ``f`` over the :math:`d` dimensional space. </span>
+
+<span class="sd">        The integration is performed as a sum with :math:`N` points sampled throough</span>
+<span class="sd">        rejection sampling with the probability density ``p``.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        N : int</span>
+<span class="sd">            Number of points to use as samples for the integration</span>
+<span class="sd">        ranges : list of lists, optional</span>
+<span class="sd">            This is a list of :math:`d` ranges, one for each dimension over which the :math:`d` dimensional vector</span>
+<span class="sd">            space is going to be uniformly sampled, by default ``None``</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The result of the integration.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">ranges</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ranges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranges</span>
+            
+        <span class="k">assert</span> <span class="n">ranges</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Ranges not provided for uniform sampling&#39;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="n">cov</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span>
+        
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">)</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="n">N</span>
+        
+        <span class="k">return</span> <span class="n">result</span></div></div>
+
+<div class="viewcode-block" id="ImportanceSampleIntegrateNormalAdaptive"><a class="viewcode-back" href="../../../../lib.density.integrate.html#lib.density.integrate.importanceSampling.ImportanceSampleIntegrateNormalAdaptive">[docs]</a><span class="k">class</span> <span class="nc">ImportanceSampleIntegrateNormalAdaptive</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Importance Sampling is the idea that we want to solve the integral of the form:</span>
+
+<span class="sd">        .. math:: \\mathbb E(f) = \\int_{-\\infty}^{\\infty} f(\\mathbf w) p(\\mathbf w)  d \\mathbf w</span>
+
+<span class="sd">        Rather than uniform sampling, it is possible that we use a Gaussian distribution to sample form. This</span>
+<span class="sd">        can be easily accomplished if we use a Gaussian distribution :math:`q` that closely represents our </span>
+<span class="sd">        required distribution :math:`p`. This can be donee by finding the parameters of a multivariate Gaussian</span>
+<span class="sd">        distribution that closely matches the required distribution using the KL-divergence.</span>
+<span class="sd">        </span>
+<span class="sd">        We shall sample directly using the multivariate Gaussian distribution that we know, rather than using </span>
+<span class="sd">        uniform sampling. That should significantly reduce the amount of time required. However for this we shall </span>
+<span class="sd">        need to change the equations a bit.</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            :nowrap:</span>
+
+<span class="sd">                \\begin{align*}</span>
+<span class="sd">                \\mathbb E(f) &amp;= \\int_{-\\infty}^{\\infty} f(\\mathbf w) p(\\mathbf w)  \\frac {q(\\mathbf w)} {q(\\mathbf w)} d \\mathbf w \\\\</span>
+<span class="sd">                              &amp;= \\int_{-\\infty}^{\\infty} \\Big( f(\\mathbf w)  \\frac {p(\\mathbf w)} {q(\\mathbf w)} \Big) q(\\mathbf w)  d \\mathbf w \\\\</span>
+<span class="sd">                              &amp;= \\frac 1 N \\sum_{i=1}^N w_s{f(w_i)}, w_i \\sim q(\\mathbf w)</span>
+<span class="sd">                 \\end{align*}</span>
+
+
+<span class="sd">        The important thing about this transformation is that the sampling form another distribution (like :math:`q(\mathbf w)`) is typically easier to do.</span>
+
+<span class="sd">        For unnormalized distributions, we can use the following formula instead:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            :nowrap:</span>
+
+<span class="sd">                \\begin{align*}</span>
+<span class="sd">                \\mathbb E(f) &amp;= \\frac 1 {\\sum_{i=1}^N w_s} \\sum_{i=1}^N w_s{f(w_i)}, w_i \\sim q(\\mathbf w)</span>
+<span class="sd">                \\end{align*}</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">ranges</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;initialize the Importance Sampler.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        f : function</span>
+<span class="sd">            This takes a numpy nd-array of dimensions :math:`(N,d)` representing a set of :math:`N` vectors </span>
+<span class="sd">            of dimension :math:`d` and return :math:`N` values that needs to be integrated over the :math:`d`</span>
+<span class="sd">            dimensional vector space.</span>
+<span class="sd">        p : function</span>
+<span class="sd">            This takes a numpy nd-array of dimensions :math:`(N,d)` representing a set of :math:`N` vectors </span>
+<span class="sd">            of dimension :math:`d` and return :math:`N` values that represents the probability density function</span>
+<span class="sd">            over the :math:`d` dimensional space.</span>
+<span class="sd">        ranges : list of lists, optional</span>
+<span class="sd">            This is a list of :math:`d` ranges, one for each dimension over which the :math:`d` dimensional vector</span>
+<span class="sd">            space is going to be uniformly sampled, by default ``None``</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ranges</span> <span class="o">=</span> <span class="n">ranges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optKL</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">ranges</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+<div class="viewcode-block" id="ImportanceSampleIntegrateNormalAdaptive.integrate"><a class="viewcode-back" href="../../../../lib.density.integrate.html#lib.density.integrate.importanceSampling.ImportanceSampleIntegrateNormalAdaptive.integrate">[docs]</a>    <span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">ranges</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Integrate the function ``f`` over the :math:`d` dimensional space. </span>
+
+<span class="sd">        The integration is performed as a sum with :math:`N` points sampled throough</span>
+<span class="sd">        rejection sampling with the probability density ``p``.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        N : int</span>
+<span class="sd">            Number of points to use as samples for the integration</span>
+<span class="sd">        ranges : list of lists, optional</span>
+<span class="sd">            This is a list of :math:`d` ranges, one for each dimension over which the :math:`d` dimensional vector</span>
+<span class="sd">            space is going to be uniformly sampled, by default ``None``</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The result of the integration.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">ranges</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ranges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranges</span>
+            
+        <span class="k">assert</span> <span class="n">ranges</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Ranges not provided for uniform sampling&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span>
+        
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">optKL</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">ranges</span><span class="p">)</span>
+            <span class="n">mu_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+
+            <span class="n">tempSamples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">))</span>
+            <span class="n">pProb</span>       <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">(</span><span class="n">tempSamples</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optKL</span> <span class="o">=</span> <span class="n">OptimizeNormalKL</span><span class="o">.</span><span class="n">OptimizeNormalKL</span><span class="p">(</span><span class="n">pProb</span><span class="p">,</span> <span class="n">tempSamples</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optKL</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">mu_0</span><span class="p">)</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">optKL</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">optKL</span><span class="o">.</span><span class="n">sigma</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optKL</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span> <span class="n">samples</span> <span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        
+        <span class="c1">#result = np.exp(np.log(f) + np.log(p) - np.log(q))</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">/</span><span class="n">q</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="n">N</span>
         
         <span class="k">return</span> <span class="n">result</span></div></div>
 </pre></div>
