@@ -4,6 +4,14 @@ lib.density.sampling package
 Submodules
 ----------
 
+lib.density.sampling.MCMC module
+--------------------------------
+
+.. automodule:: lib.density.sampling.MCMC
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 lib.density.sampling.RejectionSampling module
 ---------------------------------------------
 

@@ -177,6 +177,76 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="module-lib.density.sampling.MCMC">
+<span id="lib-density-sampling-mcmc-module"></span><h2>lib.density.sampling.MCMC module<a class="headerlink" href="#module-lib.density.sampling.MCMC" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lib.density.sampling.MCMC.MetropolisHastingsNormal">
+<em class="property">class </em><code class="sig-prename descclassname">lib.density.sampling.MCMC.</code><code class="sig-name descname">MetropolisHastingsNormal</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">d</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/sampling/MCMC.html#MetropolisHastingsNormal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.sampling.MCMC.MetropolisHastingsNormal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The MH algorithm is sampling implementation of the MCMC algorithm in which we sample
+form a given distribution <span class="math notranslate nohighlight">\(p(\mathbf x)\)</span>. This is done using the following implementation.
+Given a current position in the parameter space <span class="math notranslate nohighlight">\(\mathbf x\)</span>, get a new position using a
+proposal rule <span class="math notranslate nohighlight">\(q(\mathbf x'| \mathbf x)\)</span>. The probability of acceptance of using this new
+state is given by the acceptance rate <span class="math notranslate nohighlight">\(r\)</span>, where:</p>
+<div class="math notranslate nohighlight">
+    \begin{align*}
+    r = min(1, \frac {p(\mathbf x') q( \mathbf x | \mathbf x' )} {p(\mathbf x) q( \mathbf x' | \mathbf x )})
+    \end{align*}</div><p>Since we have both <span class="math notranslate nohighlight">\(p(\mathbf x)\)</span> on both the numerator and the demoninator, we can see
+that we can use an unnormalized density function for <span class="math notranslate nohighlight">\(p(\mathbf x)\)</span> and this is still going
+to work. Typically, for the proposal rule <span class="math notranslate nohighlight">\(q\)</span>, one chooses a Gaussian distribution. This has
+two advantages:</p>
+<p>The rule is symmetric. i.e. <span class="math notranslate nohighlight">\(q(\mathbf x | \mathbf x') = q(\mathbf x' | \mathbf x)\)</span>
+Its easy to sample from this distribution</p>
+<p>Remember that in this type of sampling, the same point may be used multiple times in sequence. In the
+limit of infinite samples, this is not a problem. However, this is something that one should remember
+while applying this method.</p>
+<p>Initialize the module</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>function</em>) – This function returns the probability density of points within a <span class="math notranslate nohighlight">\(d\)</span>-dimensional space. Given
+an <span class="math notranslate nohighlight">\((N.d)\)</span> dimensional nd-array, consisting of <span class="math notranslate nohighlight">\(N\)</span> <span class="math notranslate nohighlight">\(d\)</span>-dimensional vectors, this
+function is going to return the PDF at each of those N points as a u-array.</p></li>
+<li><p><strong>d</strong> (<em>int</em>) – This is the dimensionality of the space that we want to sample from.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="lib.density.sampling.MCMC.MetropolisHastingsNormal.sample">
+<code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param">N</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/sampling/MCMC.html#MetropolisHastingsNormal.sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.sampling.MCMC.MetropolisHastingsNormal.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>sample form the provided distribution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>N</strong> (<em>int</em>) – the number of samples to generate from the provided distribution</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>This is <span class="math notranslate nohighlight">\(N\)</span> samples form a <span class="math notranslate nohighlight">\(d\)</span>-dimensional space</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy nd-array <span class="math notranslate nohighlight">\((N,d)\)</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lib.density.sampling.MCMC.MetropolisHastingsNormal.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lib/density/sampling/MCMC.html#MetropolisHastingsNormal.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.density.sampling.MCMC.MetropolisHastingsNormal.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update the current point</p>
+<p>The current point in the MCMC chain is stored in the parameter <code class="docutils literal notranslate"><span class="pre">x</span></code>. Everry time call this functioin, this
+function updated the position of the current point with a potential new point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The current point in <span class="math notranslate nohighlight">\(d\)</span>-dimensional space</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>uarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-lib.density.sampling.RejectionSampling">
 <span id="lib-density-sampling-rejectionsampling-module"></span><h2>lib.density.sampling.RejectionSampling module<a class="headerlink" href="#module-lib.density.sampling.RejectionSampling" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
