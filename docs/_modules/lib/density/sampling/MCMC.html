@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lib.density.sampling.MCMC &mdash; src  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> src
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../densityNN.html">densityNN module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../lib.html">lib package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../logs.html">logs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">modules package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">src</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>lib.density.sampling.MCMC</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lib.density.sampling.MCMC</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="MetropolisHastingsNormal"><a class="viewcode-back" href="../../../../lib.density.sampling.html#lib.density.sampling.MCMC.MetropolisHastingsNormal">[docs]</a><span class="k">class</span> <span class="nc">MetropolisHastingsNormal</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        The MH algorithm is sampling implementation of the MCMC algorithm in which we sample </span>
+<span class="sd">        form a given distribution :math:`p(\\mathbf x)`. This is done using the following implementation. </span>
+<span class="sd">        Given a current position in the parameter space :math:`\\mathbf x`, get a new position using a </span>
+<span class="sd">        proposal rule :math:`q(\\mathbf x&#39;| \\mathbf x)`. The probability of acceptance of using this new </span>
+<span class="sd">        state is given by the acceptance rate :math:`r`, where:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            :nowrap:</span>
+
+<span class="sd">                \\begin{align*}</span>
+<span class="sd">                r = min(1, \\frac {p(\\mathbf x&#39;) q( \\mathbf x | \\mathbf x&#39; )} {p(\\mathbf x) q( \\mathbf x&#39; | \\mathbf x )})</span>
+<span class="sd">                \\end{align*}</span>
+
+
+<span class="sd">        Since we have both :math:`p(\\mathbf x)` on both the numerator and the demoninator, we can see </span>
+<span class="sd">        that we can use an unnormalized density function for :math:`p(\\mathbf x)` and this is still going </span>
+<span class="sd">        to work. Typically, for the proposal rule :math:`q`, one chooses a Gaussian distribution. This has </span>
+<span class="sd">        two advantages:</span>
+
+<span class="sd">        The rule is symmetric. i.e. :math:`q(\\mathbf x | \\mathbf x&#39;) = q(\\mathbf x&#39; | \\mathbf x)`</span>
+<span class="sd">        Its easy to sample from this distribution</span>
+
+<span class="sd">        Remember that in this type of sampling, the same point may be used multiple times in sequence. In the </span>
+<span class="sd">        limit of infinite samples, this is not a problem. However, this is something that one should remember</span>
+<span class="sd">        while applying this method. </span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Initialize the module</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        p : function</span>
+<span class="sd">            This function returns the probability density of points within a :math:`d`-dimensional space. Given</span>
+<span class="sd">            an :math:`(N.d)` dimensional nd-array, consisting of :math:`N` :math:`d`-dimensional vectors, this </span>
+<span class="sd">            function is going to return the PDF at each of those N points as a u-array.</span>
+<span class="sd">        d : int</span>
+<span class="sd">            This is the dimensionality of the space that we want to sample from.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+<div class="viewcode-block" id="MetropolisHastingsNormal.update"><a class="viewcode-back" href="../../../../lib.density.sampling.html#lib.density.sampling.MCMC.MetropolisHastingsNormal.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;update the current point</span>
+
+<span class="sd">        The current point in the MCMC chain is stored in the parameter ``x``. Everry time call this functioin, this</span>
+<span class="sd">        function updated the position of the current point with a potential new point.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        uarray</span>
+<span class="sd">            The current point in :math:`d`-dimensional space</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="n">xD</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">(</span><span class="n">xD</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">xD</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span></div>
+    
+<div class="viewcode-block" id="MetropolisHastingsNormal.sample"><a class="viewcode-back" href="../../../../lib.density.sampling.html#lib.density.sampling.MCMC.MetropolisHastingsNormal.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;sample form the provided distribution</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        N : int</span>
+<span class="sd">            the number of samples to generate from the provided distribution</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy nd-array :math:`(N,d)`</span>
+<span class="sd">            This is :math:`N` samples form a :math:`d`-dimensional space</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span> <span class="p">)</span>
+        
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">samples</span></div></div>
+        
+        
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Author
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
