@@ -34,7 +34,7 @@ For deactivating, just type deactivate in your shell
 
 Detailed documentation is present in the [Wiki](https://github.com/sankhaMukherjee/densityNN/wiki). The API generated is present in the repos website [website](https://sankhamukherjee.github.io/densityNN/index.html). 
 
-Since this repo mainly comprises of a set of tutorials, the main page of the tutorials may be found [here](https://github.com/sankhaMukherjee/densityNN/wiki/tutorial). This comprises of a set of tutorials that can be used for exploring density-based AI methodologies.
+Since this repo mainly comprises of a set of tutorials, the main page of the tutorials may be found [here](https://github.com/sankhaMukherjee/densityNN/wiki/done). This comprises of a set of tutorials that can be used for exploring density-based AI methodologies.
 
 Here are some quick links:
 
@@ -44,6 +44,7 @@ Here are some quick links:
 | [Modules](https://sankhamukherjee.github.io/densityNN/modules.html) |
 | [lib](https://sankhamukherjee.github.io/densityNN/lib.html) |
 | Indices: [Index](https://sankhamukherjee.github.io/densityNN/genindex.html) \| [Module Index](https://sankhamukherjee.github.io/densityNN/py-modindex.html)  |
+
 
 
 
@@ -59,9 +60,8 @@ Sankha S. Mukherjee - Initial work (2019)
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details
 
-## Acknowledgments
-
- - Hat tip to anyone who's code was used
- - Inspiration
- - etc.
  
+## References:
+
+1. Murphy K. P., Machine Learning: a Probabilistic Perspective,  ISBN-13: 978-0262018029, ISBN-10: 0262018020 
+2. Nando de Freitas, [Machine Learning 2013, Video Lectures](https://www.youtube.com/playlist?list=PLE6Wd9FR--EdyJ5lbFl8UuGjecvVw66F6)
